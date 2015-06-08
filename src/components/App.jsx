@@ -14,7 +14,8 @@ export default class App extends React.Component {
 
     this.state = {
       users          : [],
-      isLoadingSearch: false
+      isLoadingSearch: false,
+      searchError    : false
     };
   }
 
@@ -24,22 +25,26 @@ export default class App extends React.Component {
         <SearchControls
           searchCallback = {this._handleNewSearch.bind(this)} />
         <UserList
-          isLoading = {this.state.isLoadingSearch}
-          users     = {this.state.users} />
+          isLoading   = {this.state.isLoadingSearch}
+          searchError = {this.state.searchError}
+          users       = {this.state.users} />
       </div>
     );
   }
 
   _handleNewSearch(repo) {
-    this.setState({isLoadingSearch: true});
+    this.setState({
+      searchError    : false,
+      isLoadingSearch: true
+    });
 
     get(`repos/${repo}/contributors`)
-      .then( xs => getUsersProfiles(_getUserNames(xs)) )
+      .then( xs => xs ? getUsersProfiles(_getUserNames(xs)) : false )
       .then( xs => {
-        console.log(_usersWithLocation(xs));
         this.setState({
-          users          : _usersWithLocation(xs),
-          isLoadingSearch: false
+          users          : xs ? _usersWithLocation(xs) : false,
+          isLoadingSearch: false,
+          searchError    : !xs ? repo : false
         });
       });
   }

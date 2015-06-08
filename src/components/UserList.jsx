@@ -5,7 +5,7 @@ export default class UserList extends React.Component {
   render() {
 
     const users =
-      this.props.users ?
+      !!this.props.users ?
         this.props.users
           .map(user =>
             <User
@@ -22,6 +22,9 @@ export default class UserList extends React.Component {
 
         {this.props.isLoading ?
           <h2>Loading Search Results...</h2> : false}
+
+        {this.props.searchError ?
+          <h2>Error Loading Results from "{this.props.searchError}", check that the repo exists and is correctly specified</h2> : false}
 
         {users}
       </ul>

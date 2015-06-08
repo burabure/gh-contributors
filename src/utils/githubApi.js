@@ -8,16 +8,23 @@ const oauthParams = 'client_id=939bf47a930e482c8807&client_secret=d51c9b7155f228
 export function get(query) {
   return _getPromise(`//api.github.com/${query}?per_page=100&${oauthParams}`)
     .then( r => {
-      const linkHeader            = parseLinkHeader(r.getResponseHeader('Link'));
-      const pagingUri             = linkHeader.last.replace(/(.*page=)\d/, '$1');
-      const lastPage              = parseInt(linkHeader.last.replace(/.*page=(\d)/, '$1'), 10);
-      const pageNumbersArray      = R.range(1, lastPage + 1);
-      const pageNumbersToPromises = R.map( n => _getPromise(`${pagingUri}${n}`) );
+      if (r.getResponseHeader('Link')) {
+        const linkHeader            = parseLinkHeader(r.getResponseHeader('Link'));
+        const lastPage              = parseInt(linkHeader.last.replace(/.*page=(\d)/, '$1'), 10);
+        const pagingUri             = linkHeader.last.replace(/(.*page=)\d/, '$1');
+        const pageNumbersArray      = R.range(1, lastPage + 1);
+        const pageNumbersToPromises = R.map( n => _getPromise(`${pagingUri}${n}`) );
 
-      return Promise.all(pageNumbersToPromises(pageNumbersArray));
+        return Promise.all(pageNumbersToPromises(pageNumbersArray));
+      } else {
+        return [r];
+      }
     })
     .then( rs => R.chain( x => JSON.parse(x.response), rs) )
-    .catch( err => console.log(`Error getting //api.github.com/${query}`, err) );
+    .catch( err => {
+      console.log(`Error getting //api.github.com/${query}`, err);
+      return false;
+    });
 }
 
 /*
