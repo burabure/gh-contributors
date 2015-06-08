@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "description": "GitHub Contributors Search and Filter",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "webpack -p"
   },
   "author": "Nicolas 'BuraBure' Fernandez <nicolas@santiagolab.cl> (http://github.com/burabure)",
   "license": "MIT",
   "dependencies": {
-    "github": "^0.2.4",
-    "parallelshell": "^1.1.1",
     "ramda": "^0.14.0"
   },
   "devDependencies": {
@@ -21,6 +20,7 @@
     "node-libs-browser": "^0.5.2",
     "react": "^0.13.3",
     "react-hot-loader": "^1.2.7",
+    "uglify-loader": "^1.2.0",
     "webpack": "^1.9.9",
     "webpack-dev-server": "^1.9.0"
   }
