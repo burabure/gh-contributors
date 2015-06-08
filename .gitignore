@@ -1,5 +1,3 @@
 node_modules
-css/*.css
-js/bundle.js
 scss/**/*.map
 css/**/*.map

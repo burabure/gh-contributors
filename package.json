@@ -4,7 +4,8 @@
   "description": "GitHub Contributors Search and Filter",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack -p"
+    "build": "webpack -p --config webpack.config.production.js",
+    "gh-pages": "git checkout gh-pages && git merge master"
   },
   "author": "Nicolas 'BuraBure' Fernandez <nicolas@santiagolab.cl> (http://github.com/burabure)",
   "license": "MIT",
